@@ -2,6 +2,7 @@
 Early stages of development of a GitHub project tracker. It's like watching a 
 live birth. But messier.
 '''
+
 import sys
 from optparse import OptionParser
 
@@ -53,7 +54,8 @@ def main(args_in):
     if opt.development:
         run()
     else:
-        run('fastcgi', socket='/tmp/fcgi-disciple-%s.socket' % server_num)
+        socket = '/tmp/fcgi-disciple-%s.socket' % server_num
+        run('fastcgi', socket=socket, umask=0111)
 
 
 if __name__=='__main__':
