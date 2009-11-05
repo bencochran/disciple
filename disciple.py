@@ -34,7 +34,9 @@ def index(request):
             if not isinstance(commits, list):
                 commits = []
             repos.append(AttrDict({'info':info, 'commits':commits}))
-        mc.set("disciple_repos", repos)
+        
+        # cache it for 10 minutes
+        mc.set("disciple_repos", repos, time=600)
     
     page = render('overview.html', repos=repos)
     return (200, {'Content-Type': 'text/html'}, page)
