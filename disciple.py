@@ -54,7 +54,7 @@ def main(args_in):
     if opt.development:
         run()
     else:
-        socket = '/tmp/fcgi-disciple-%s.socket' % server_num
+        socket = '/tmp/fcgi-disciple-%s.socket' % opt.server_num
         run('fastcgi', socket=socket, umask=0111)
 
 
