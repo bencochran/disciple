@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h2>Dashboard</h2>
+    <p>
+      Overview
+    </p>
+    {% for repo in repos %}
+        {{ project(repo) }}
+    {% else %}
+    {% endfor %}
+{% endblock %}
+{% macro project(repo) -%}
+    <h3>{{ repo.info.name }}</h3>
+    <section>
+        <ul>
+        {% for commit in repo.commits %}
+            <li {%- if loop.index > 3 %} class="more"{% endif -%}>
+                {{ commit_info(commit) }}
+            </li>
+        {% else %}
+            <li><em>No commits have been made</em></li>
+        {% endfor %}
+        </ul>
+    </section>
+{%- endmacro %}
+{% macro commit_info(commit) -%}
+    <ul>
+        <li class="link">
+            <a href="{{ commit.url }}">{{ commit.id|truncate(7,True,'') }}</a>
+        </li>
+        <li>
+            <a href="{{ commit.url }}">{{ commit.message|truncate(150) }}</a>
+        </li>
+        <li>
+            <a href="{{ commit.url }}">{{ commit.committed_date }}</a>
+        </li>
+        <li>
+            by {{ commit.committer.name }}
+        </li>
+    </ul>
+{%- endmacro %}
