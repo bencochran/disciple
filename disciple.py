@@ -8,7 +8,7 @@ from optparse import OptionParser
 
 from github import github
 from bop import *
-
+import memcache
 
 import config
 from helpers import AttrDict
@@ -18,18 +18,23 @@ __version__ = "0.1"
 
 @get('/')
 def index(request):
-    try:
-        gh = github.GitHub(config.username, config.token)
-    except AttributeError, e:
-        gh = github.GitHub()
+    mc = memcache.Client(['127.0.0.1:11211'])
+    repos = mc.get('disciple_repos')
+    
+    if not repos:
+        try:
+            gh = github.GitHub(config.username, config.token)
+        except AttributeError, e:
+            gh = github.GitHub()
 
-    repos = []
-    for repo in config.repos:
-        info = gh.repos.show(repo.user, repo.repo)
-        commits = gh.commits.forBranch(repo.user, repo.repo, repo.branch)
-        if not isinstance(commits, list):
-            commits = []
-        repos.append(AttrDict({'info':info, 'commits':commits}))
+        repos = []
+        for repo in config.repos:
+            info = gh.repos.show(repo.user, repo.repo)
+            commits = gh.commits.forBranch(repo.user, repo.repo, repo.branch)
+            if not isinstance(commits, list):
+                commits = []
+            repos.append(AttrDict({'info':info, 'commits':commits}))
+        mc.set("disciple_repos", repos)
     
     page = render('overview.html', repos=repos)
     return (200, {'Content-Type': 'text/html'}, page)
