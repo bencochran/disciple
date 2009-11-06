@@ -23,7 +23,7 @@
     <section>
         <ul>
         {% for commit in repo.commits %}
-            <li {%- if loop.index > 3 %} class="more"{% endif -%}>
+            <li class="commit {% if loop.index > 3 %} more {%- endif %}">
                 {{ commit_info(commit) }}
             </li>
         {% else %}
@@ -37,10 +37,10 @@
         <li class="link">
             <a href="{{ commit.url }}">{{ commit.id|truncate(7,True,'') }}</a>
         </li>
-        <li>
+        <li class="message">
             <a href="{{ commit.url }}">{{ commit.message|truncate(75) }}</a>
         </li>
-        <li>
+        <li class="date">
             <a href="{{ commit.url }}">
                 <span class="relatize">{{ commit.committed_date }}</span>
             </a>
