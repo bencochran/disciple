@@ -19,7 +19,7 @@
     {% endfor %}
 {% endblock %}
 {% macro project(repo) -%}
-    <h3>{{ repo.info.name }}</h3>
+    <h3>{{ repo.info.owner }}’s {{ repo.info.name }}</h3>
     <section>
         <ul>
         {% for commit in repo.commits %}
