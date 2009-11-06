@@ -2,6 +2,11 @@
 {% block title %}Dashboard{% endblock %}
 {% block head %}
     {{ super() }}
+    <script type="text/javascript" charset="utf-8">
+    	$(document).ready(function(){
+    	    $('.relatize').relatizeDate();
+	    });
+    </script>
 {% endblock %}
 {% block content %}
     <h2>Dashboard</h2>
@@ -33,10 +38,12 @@
             <a href="{{ commit.url }}">{{ commit.id|truncate(7,True,'') }}</a>
         </li>
         <li>
-            <a href="{{ commit.url }}">{{ commit.message|truncate(150) }}</a>
+            <a href="{{ commit.url }}">{{ commit.message|truncate(75) }}</a>
         </li>
         <li>
-            <a href="{{ commit.url }}">{{ commit.committed_date }}</a>
+            <a href="{{ commit.url }}">
+                <span class="relatize">{{ commit.committed_date }}</span>
+            </a>
         </li>
         <li>
             by {{ commit.committer.name }}

@@ -9,6 +9,7 @@ from optparse import OptionParser
 from github import github
 from bop import *
 import memcache
+import iso8601
 
 import config
 from helpers import AttrDict
@@ -33,6 +34,12 @@ def index(request):
             commits = gh.commits.forBranch(repo.user, repo.repo, repo.branch)
             if not isinstance(commits, list):
                 commits = []
+            for commit in commits:
+                committed_date = iso8601.parse_date(commit.committed_date)
+                commit.committed_date = committed_date.strftime('%a %b %d %H:%M:%S %z %Y')
+                authored_date = iso8601.parse_date(commit.authored_date)
+                commit.authored_date = authored_date.strftime('%a %b %d %H:%M:%S %z %Y')
+                
             repos.append(AttrDict({'info':info, 'commits':commits}))
         
         # cache it for 10 minutes
@@ -48,11 +55,19 @@ def main(args_in):
         dest="development", help="run server in development mode")
     p.add_option("-n", "--number", type="int", dest="server_num",
         help="Server instance number")
+    p.add_option("-c", "--clear-cache", action="store_true", 
+        dest="clear_cache", help="clear the cache")
     opt, args = p.parse_args(args_in)
 
-    if not opt.server_num and not opt.development:
-        p.error("either -d or -n are required")
+    
 
+    if not opt.server_num and not opt.development and not opt.clear_cache:
+        p.error("you must specify at least one options")
+    
+    if opt.clear_cache:
+        mc = memcache.Client(['127.0.0.1:11211'])
+        mc.delete('disciple_repos')
+    
     # set our bop environment
     root = get_root()
     root.env['template.engine'] = 'jinja2'
@@ -60,7 +75,7 @@ def main(args_in):
 
     if opt.development:
         run()
-    else:
+    elif opt.server_num:
         socket = '/tmp/fcgi-disciple-%s.socket' % opt.server_num
         run('fastcgi', socket=socket, umask=0111)
 
