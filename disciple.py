@@ -15,10 +15,22 @@ from helpers import AttrDict
 
 __version__ = "0.1"
 
+# Tell Bop about the static/ directory.
+# Under the development runner, this folder will now be served as normal.
+# Under any runner, this object supports attribute access, so that (when called
+# while handling a request):
+#     static['jquery.js']
+# gives a full URI to static/jquery.js.
+# Template code can do that, too, since objects in your module are
+# automatically put in template scope by Bop. (Sorry for all the undocumented
+# magic!)
+static = static_directory('/static', 'static')
+
 @setup
 def setup_cache():
     cache = memcache.Client(['127.0.0.1:11211'])
     
+    # invoke bop -e clear_cache disciple.py to clear the cache at startup
     if env('clear_cache'):
         cache.delete('disciple_repos')
     

@@ -1,0 +1,72 @@
+/* @override http://status.gnar.us/static/screen.css */
+
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, Geneva;
+	padding: 0;
+	margin: 0 10px;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 3em;
+	margin: 0 0 25px 0;
+	padding: 60px 40px 30px;
+	background-color: #000;
+	color: #ffffff;
+	border-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-moz-border-radius-bottomright: 10px;
+	
+}
+
+h2 {
+	margin: 0 0 25px 0;
+	padding: 0;
+}
+
+p {
+	margin: .5em 0;
+}
+
+a, a:visited {
+	color: #345F8C;
+	text-decoration: none;
+}
+
+a:hover, a:active {
+	color: #40270B;
+	text-decoration: underline;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li.commit {
+	margin: 10px 0;
+	padding: 0 40px;
+}
+
+li.more {
+	display: none;
+}
+
+li.link {
+	display: none;
+}
+
+li.message {
+
+}
+
+li.date {
+
+}
+
+li.author {
+
+}
